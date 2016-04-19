@@ -1,21 +1,19 @@
 # simple
 
-#-----------------------------------------------#
-# Simple PHP									#
-#	简单、干净的php框架							#
-#												#
-# author	gavinczhang							#
-# email		gavin6487@gmail.com					#
-# version	0.3									#
-# changed	2014年5月23日 20:14:46				#
-# Explanation									#
-#		· 允许自定义Route							#
-#		· 修改Route的挂载方式						#
-#		· 增加config文件route.php					#
-#		· 修改站点的入口为Route::init				#
-#		* 暂不支持正则route规则					#
-#												#
-#-----------------------------------------------#
+		Simple PHP
+			简单、干净的php框架
+
+		author		gavinczhang
+		email		gavin6487@gmail.com
+		version		0.3
+		changed		2014年5月23日 20:14:46
+		Explanation
+				* 允许自定义Route
+				* 修改Route的挂载方式
+				* 增加config文件route.php	
+				* 修改站点的入口为Route::init
+				* 暂不支持正则route规则
+
 
 [目录结构]
 	controller	控制器目录
