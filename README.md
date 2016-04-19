@@ -1,47 +1,45 @@
 # simple
 
-		Simple PHP
-			简单、干净的php框架
+Simple PHP
+	简单、干净的php框架
 
-		author		gavinczhang
-		email		gavin6487@gmail.com
-		version		0.3
-		changed		2014年5月23日 20:14:46
-		Explanation
-				* 允许自定义Route
-				* 修改Route的挂载方式
-				* 增加config文件route.php	
-				* 修改站点的入口为Route::init
-				* 暂不支持正则route规则
+author		gavinczhang
+email		gavin6487@gmail.com
+version		0.3
+changed		2014年5月23日 20:14:46
+Explanation
+		* 允许自定义Route
+		* 修改Route的挂载方式
+		* 增加config文件route.php	
+		* 修改站点的入口为Route::init
+		* 暂不支持正则route规则
 
+##目录结构
 
-[目录结构]
-	controller	控制器目录
-		welcome.php	默认controller
-	view		视图目录
-	model		模型目录
+controller	控制器目录
+	welcome.php	默认controller
+view		视图目录
+model		模型目录
 
-	class		核心类库目录
-		core.php	核心类
-		arr.php		数组操作类
-		config.php	config文件读取类
-		db.php		mysql操作类
-		orm.php		ORM封装
-		cookie.php	cookie操作封装
-		session.php	session操作封装（*需要ORM、cookie支持）
-		controller.php	Controller类
-		view.php	视图类
-		route.php	路由类
-		valid.php	验证参数是否有效
-	config		配置文件目录
-		database.php	数据库配置
-		cookie.php	cookie配置
-		session.php	session配置
-	init.php	入口文件
+class		核心类库目录
+	core.php	核心类
+	arr.php		数组操作类
+	config.php	config文件读取类
+	db.php		mysql操作类
+	orm.php		ORM封装
+	cookie.php	cookie操作封装
+	session.php	session操作封装（*需要ORM、cookie支持）
+	controller.php	Controller类
+	view.php	视图类
+	route.php	路由类
+	valid.php	验证参数是否有效
+config		配置文件目录
+	database.php	数据库配置
+	cookie.php	cookie配置
+	session.php	session配置
+init.php	入口文件
 
-#-----------------------------------------------#
-# 常用操作										#
-#-----------------------------------------------#
+##常用操作
 
 [AJAX输出]
 	Core::ajax(array('test' => 123));   =>   json_encode(array('status' => true, 'data' => array('test' => 123)));
@@ -83,9 +81,8 @@
 	//*未来将支持正则表达式
 	Route::set('list/<controller>/<action>', array('controller' => 'temp', 'action' => 'list'));	表示所有/list/controller_name/action_name下的网址，均由对应的controller和action执行
 
-#-----------------------------------------------#
-# 相关错误信息									#
-#-----------------------------------------------#
+##相关错误信息
+
 
 [Wrong Type 1] 文件(model/class/view/config)不存在
 [Wrong Type 2] 初始化参数(cookie)无定义
