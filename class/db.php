@@ -29,47 +29,48 @@ class DB
 	}
 
 	//连接
-	public function connect($hostname, $username, $password, $database = '', $pconnect = false)
+	public function connect($hostname, $username, $password, $database = '')
 	{
-		$func = !$pconnect ? 'mysql_connect' : 'mysql_pconnect';
-		if (!$this->_link = @$func($hostname, $username, $password, 1))
+		$this->_link = new mysqli($hostname, $username, $password);
+		if ($this->_link->connect_errno)
 		{
 			$this->halt();
 		}
-		else
+
+		if (!empty($database))
 		{
-			$database && @mysql_select_db($database, $this->_link);
+			$this->_link->select_db($database);
 		}
 		return $this;
 	}
 
 	//执行并返回
-	public function query($sql, $type = '')
+	public function query($sql)
 	{
-		$func = ($type == 'UNBUFFERED' && @function_exists('mysql_unbuffered_query')) ? 'mysql_unbuffered_query' : 'mysql_query';
-		if (!($query = @$func($sql, $this->_link)) && $type != 'SILENT')
+		$result = $this->_link->query($sql);
+		if ($result)
 		{
-			$this->halt($sql);
+			return $result;
 		}
-		return $query;
+		$this->halt($sql);
 	}
 
 	//mysql_fetch_array函数
-	public function fetch($query, $result_type = MYSQL_ASSOC)
+	public function fetch($result)
 	{
-		return @mysql_fetch_array($query, $result_type);
+		return $result->fetch_assoc();
 	}
 
 	//最新插入id
 	public function insert_id()
 	{
-		return mysql_insert_id($this->_link);
+		return $this->_link->insert_id;
 	}
 
 	//报错且退出
 	public function halt($sql = null)
 	{
-		$str = '[Mysql Error '.mysql_errno($this->_link).']: '.mysql_error($this->_link);
+		$str = '[Mysql Error '.$this->_link->connect_errno.']: '.$this->_link->connect_error;
 		if (!empty($sql))
 		{
 			$str .= "\nSQL: ".$sql;
@@ -81,14 +82,9 @@ class DB
 	public function check($value)
 	{
 		$value = trim($value);
-		if (get_magic_quotes_gpc())
-		{
-			//删除magic方法添加的反斜杠
-			$value = stripslashes($value);
-		}
 		if (!is_numeric($value))
 		{
-			$value = mysql_real_escape_string($value, $this->_link);
+			$value = $this->_link->real_escape_string($value);
 		}
 		return $value;
 	}

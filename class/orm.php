@@ -115,7 +115,6 @@ class ORM
 	//新增	返回插入id
 	public function add($data)
 	{
-		$this->check(true, false);
 		$fields = array();
 		$values = array();
 		foreach ($data as $key=>$value)
@@ -132,7 +131,6 @@ class ORM
 	//插入一批	*需测试
 	public function add_all($data)
 	{
-		$this->check(true, false);
 		$fields = array();
 		$values = array();
 		foreach ($data as $temp)
@@ -158,32 +156,46 @@ class ORM
 	//快速修改
 	public function save($data)
 	{
-		$this->check(true, false);
 		$sql = "UPDATE ".$this->_table." SET ";
 		$data_array = array();
 		foreach ($data as $key=>$value)
 		{
-			$data_array[] = "`$key` = '".$this->filter($value)."'";
+			if (substr($value, 0, 6) == 'SELF::')
+			{
+				$temp = substr($value, 6);
+				switch ($temp)
+				{
+					case 'INC':
+						$data_array[] = "`$key` = `$key` + 1";
+						break;
+					case 'DEC':
+						$data_array[] = "`$key` = `$key` - 1";
+						break;
+					default:
+						$data_array[] = "`$key` = `$key` ".$value;
+						break;
+				}
+			}
+			else
+			{
+				$data_array[] = "`$key` = '".$this->filter($value)."'";
+			}
 		}
 		$str = implode(',', $data_array);
 		$sql .= $str . $this->_where.$this->_order.$this->_limit;
-		$query = DB::instance()->query($sql);
-		return DB::instance()->fetch($query);
+		return DB::instance()->query($sql);
 	}
 
 	//删除
 	public function delete()
 	{
-		$this->check(true, true);
 		$sql = "DELETE FROM ".$this->_table.$this->_where.$this->_order.$this->_limit;
-		$query = DB::instance()->query($sql);
-		return DB::instance()->fetch($query);
+		return DB::instance()->query($sql);
 	}
 
 	//搜索相关冗余	select逗号分隔
 	private function _find($select = '*')
 	{
-		$this->check(true, false);
 		if ($select != '*' && $select != 'COUNT(*)')
 		{
 			$columns = explode(',', $select);
@@ -259,8 +271,8 @@ class ORM
 	//例如 'id,title,name', false	array(0 => array(id => 1, title => 12, name => 123))
 	public function get_fields($fields, $key = true)
 	{
-		$columns = explode(',', $fileds);
-		$query = $this->_find($fileds);
+		$columns = explode(',', $fields);
+		$query = $this->_find($fields);
 		$result = array();
 		while ($row = DB::instance()->fetch($query))
 		{
@@ -275,19 +287,6 @@ class ORM
 		}
 		return $result;
 		
-	}
-
-	//检测table和where是否为空
-	public function check($table = true, $where = true)
-	{
-		if ($table && is_null($this->_table))
-		{
-			die("[ORM Error 1] Table Name Can Not Be Empty!");
-		}
-		if ($where && is_null($this->_where))
-		{
-			die("[ORM Error 2] Parameter '$where' Can Not Be Empty!");
-		}
 	}
 
 	//过滤
