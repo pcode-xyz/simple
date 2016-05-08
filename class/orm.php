@@ -110,6 +110,7 @@ class ORM
 		{
 			$this->_order = ' ORDER BY `' . $order_by . '`';
 		}
+		return $this;
 	}
 
 	//新增	返回插入id

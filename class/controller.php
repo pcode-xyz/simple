@@ -43,7 +43,19 @@ class Controller
 	//处理post参数
 	public function _post($key, $filter = 'trim', $default = null)
 	{
-		return $this->_filter($_GET, $key, $filter, $default);
+		return $this->_filter($_POST, $key, $filter, $default);
+	}
+	
+	public function _r($key, $filter = 'trim', $default = null)
+	{
+		if (isset($_GET[$key]))
+		{
+			return $this->_get($key, $filter, $default);
+		}
+		else
+		{
+			return $this->_post($key, $filter, $default);
+		}
 	}
 
 } // End Controller

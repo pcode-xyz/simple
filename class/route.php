@@ -42,7 +42,7 @@ class Route
 		if (!$parse_url)
 		{
 			//非法url
-			die("[Wrong Type 3]: URL is Illegal! " . Arr::get($_SERVER, 'REQUEST_URI'));
+			Core::quit("[Wrong Type 3]: URL is Illegal! " . Arr::get($_SERVER, 'REQUEST_URI'));
 		}
 		else
 		{
@@ -66,7 +66,7 @@ class Route
 				$uri_array = array();
 			}
 
-			//* 尽快支持正则格式的路由
+			//TODO 尽快支持正则格式的路由
 			//构造controller/action字符串 判断是否被特殊定义
 			$url = Arr::get($uri_array, '0').'/'.Arr::get($uri_array, '1');
 			$url = trim($url, '/');
@@ -91,6 +91,10 @@ class Route
 				//存在此controller文件
 				if (method_exists($controller_name, $action_name))
 				{
+					Core::$mvc = [
+						'controller'	=> $controller_name,
+						'action'		=> $action_name,
+					];
 					$controller = new $controller_name();
 					$controller->before();
 					$controller->$action_name();
@@ -118,6 +122,6 @@ class Route
 			$controller->after();
 			return;
 		}
-		die("[HTTP Error 404] Page is Not Found!");
+		Core::quit("[HTTP Error 404] Page is Not Found!");
 	}
 }

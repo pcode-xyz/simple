@@ -110,7 +110,7 @@ class Cookie
 		// Require a valid salt
 		if ( ! Cookie::$salt)
 		{
-			die("[Wrong Type 2]: Cookie Salt Not Defined!");
+			Core::quit("[Wrong Type 2]: Cookie Salt Not Defined!");
 		}
 
 		// Determine the user agent

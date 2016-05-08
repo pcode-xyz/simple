@@ -3,9 +3,15 @@
 class DB
 {
 	private static $_instance = null;
-	private $_link = null;
-	//临时结果集
 
+	/**
+	 * @var mysqli
+	 */
+	private $_link = null;
+
+	/**
+	 * @return DB
+	 */
 	public static function instance()
 	{
 		if (!(DB::$_instance instanceof DB))
@@ -56,6 +62,10 @@ class DB
 	}
 
 	//mysql_fetch_array函数
+	/**
+	 * @param $result mysqli_result
+	 * @return mixed
+	 */
 	public function fetch($result)
 	{
 		return $result->fetch_assoc();
@@ -70,12 +80,20 @@ class DB
 	//报错且退出
 	public function halt($sql = null)
 	{
-		$str = '[Mysql Error '.$this->_link->connect_errno.']: '.$this->_link->connect_error;
+		if (is_null($sql))
+		{
+			$str = '[Mysql Connect Error '.$this->_link->connect_errno.']: '.$this->_link->connect_error;
+		}
+		else
+		{
+			$str = '[Mysql Error '.$this->_link->errno.']: '.$this->_link->error;
+		}
+
 		if (!empty($sql))
 		{
 			$str .= "\nSQL: ".$sql;
 		}
-		die($str);
+		Core::quit($str);
 	}
 
 	//过滤参数

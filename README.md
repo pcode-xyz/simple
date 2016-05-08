@@ -6,13 +6,15 @@
 	author		gavinczhang
 	email		gavin6487@gmail.com
 	version		0.3
-	changed		2014年5月23日 20:14:46
+	changed		2016年5月09日 00:47:46
 	Explanation
 			* 允许自定义Route
 			* 修改Route的挂载方式
 			* 增加config文件route.php	
 			* 修改站点的入口为Route::init
 			* 暂不支持正则route规则
+			* 增加日志操作
+			* 增加redis封装
 
 ##目录结构
 
@@ -26,6 +28,7 @@
 		arr.php		数组操作类
 		config.php	config文件读取类
 		db.php		mysql操作类
+		redisdb.php	redis封装
 		orm.php		ORM封装
 		cookie.php	cookie操作封装
 		session.php	session操作封装（*需要ORM、cookie支持）
@@ -37,12 +40,14 @@
 		database.php	数据库配置
 		cookie.php	cookie配置
 		session.php	session配置
-	init.php	入口文件
+	logs		日志
+	index.php	入口文件
 
 ##常用操作
 
-	[AJAX输出]
-		Core::ajax(array('test' => 123));   =>   json_encode(array('status' => true, 'data' => array('test' => 123)));
+	[写日志]
+		//日志文件在logs下，按日期存放
+		Core::log($title, $subtitle, $content);
 
 	[数组操作]
 		$row = Arr::get($array, 'test', false);   =>   $row = isset($array['test']) ? $array['test'] : false;
@@ -78,7 +83,7 @@
 	[Route操作]
 		Route::set('list/hello', array('controller' => 'temp', 'action' => 'list'));	表示***.***.***/list/hello的网址，由Controller_Temp类下的action_list方法执行
 		Route::set('404', array('controller' => 'error', 'action' => '404'));	表示定义404页面
-		//*未来将支持正则表达式
+		//TODO 未来将支持正则表达式
 		Route::set('list/<controller>/<action>', array('controller' => 'temp', 'action' => 'list'));	表示所有/list/controller_name/action_name下的网址，均由对应的controller和action执行
 
 ##相关错误信息
@@ -89,9 +94,6 @@
 
 	[Mysql Error] mysql错误号及错误信息
 	SQL: 错误语句
-
-	[ORM Error 1] 表名不得为空
-	[ORM Error 1] 检索条件不得为空
 
 	[HTTP Error 404] controller或action不存在
 

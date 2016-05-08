@@ -5,6 +5,9 @@ class Config
 	public static $_config = array();
 
 	//获取某文件中某字段 eg: database.username 获取database.php文件中的username字段的值
+	/**
+	 * @return array
+	 * */
 	public static function get($key, $default = null)
 	{
 		if (strpos($key, '.') !== FALSE)
@@ -40,7 +43,7 @@ class Config
 		$path = Core::find_file('config', $filename);
 		if (!$path)
 		{
-			die("[Wrong Type 1]: Config File Not Found! " . $filename);
+			Core::quit("[Wrong Type 1]: Config File Not Found! " . $filename);
 		}
 		else
 		{

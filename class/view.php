@@ -12,7 +12,7 @@ class View
 		if (!$path)
 		{
 			//模板文件不存在
-			die("[Wrong Type 1]: View File Not Found! " . $filename);
+			Core::quit("[Wrong Type 1]: View File Not Found! " . $filename);
 		}
 		else
 		{
