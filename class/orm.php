@@ -7,7 +7,6 @@ class ORM
 	private $_where = null;
 	private $_limit = null;
 	private $_order = null;
-	private $_sql = null;
 
 	//简易工厂
 	public static function factory($table)
@@ -38,10 +37,9 @@ class ORM
 	{
 		if (empty($filters))
 		{
-			return $this;
+			$this->_where = " WHERE 0";
 		}
-		
-		if (is_numeric($filters))
+		elseif (is_numeric($filters))
 		{
 			$this->_where = " WHERE `id` = " . $filters;
 		}
@@ -79,7 +77,7 @@ class ORM
 	//设定limit
 	public function limit($limit, $offset = null)
 	{
-		if (!is_null($offset))
+		if (is_null($offset))
 		{
 			$this->_limit = ' LIMIT ' . $limit;
 		}
@@ -218,6 +216,7 @@ class ORM
 	//查找一条
 	public function find()
 	{
+		$this->limit(1);
 		$query = $this->_find();
 		return DB::instance()->fetch($query);
 	}
@@ -237,6 +236,7 @@ class ORM
 	//获取某一个字段的值
 	public function get($column, $default = null)
 	{
+		$this->limit(1);
 		$query = $this->_find($column);
 		$row = DB::instance()->fetch($query);
 		return Arr::get($row, $column, $default);
@@ -287,7 +287,6 @@ class ORM
 			}
 		}
 		return $result;
-		
 	}
 
 	//过滤
