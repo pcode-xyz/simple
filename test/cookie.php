@@ -1,6 +1,6 @@
 <?php
 
-require_once '../init.php';
+require_once '../index.php';
 
 Cookie::set('test', 'nnn');
 

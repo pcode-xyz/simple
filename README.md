@@ -6,7 +6,7 @@
 	author		gavinczhang
 	email		gavin6487@gmail.com
 	version		0.3
-	changed		2016年5月09日 00:47:46
+	changed		2016年5月15日 01:33:46
 	Explanation
 			* 允许自定义Route
 			* 修改Route的挂载方式
@@ -146,3 +146,6 @@
 	· 增加config文件route.php，用以自定义route规则
 	· 修改站点的入口Route::run为Route::init 执行Route初始化读入
 	* 暂不支持复杂的正则格式route规则
+
+	2016年5月15日
+	· Bug fixed

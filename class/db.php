@@ -71,6 +71,16 @@ class DB
 		return $result->fetch_assoc();
 	}
 
+	public function fetch_all($result)
+	{
+		$return = [];
+		while ($row = $this->fetch($result))
+		{
+			$return[] = $row;
+		}
+		return $return;
+	}
+
 	//最新插入id
 	public function insert_id()
 	{

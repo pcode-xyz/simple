@@ -35,13 +35,13 @@ class ORM
 	//设定filter	数组暂不支持or
 	public function where($filters)
 	{
-		if (empty($filters))
-		{
-			$this->_where = " WHERE 0";
-		}
-		elseif (is_numeric($filters))
+		if (is_numeric($filters))
 		{
 			$this->_where = " WHERE `id` = " . $filters;
+		}
+		elseif (empty($filters))
+		{
+			$this->_where = " WHERE 0";
 		}
 		elseif (is_array($filters))
 		{
@@ -53,7 +53,14 @@ class ORM
 				{
 					if ($value[0] == 'IN' || $value[0] == 'NOT IN')
 					{
-						$t[] = "`" . $key . "` " . $value[0] . " ('" . implode("','", $this->filter($value[1])) . "')";
+						if (!empty($value[1]))
+						{
+							$t[] = "`" . $key . "` " . $value[0] . " ('" . implode("','", $this->filter($value[1])) . "')";
+						}
+						else
+						{
+							$t[] = '0';
+						}
 					}
 					else
 					{
@@ -287,6 +294,7 @@ class ORM
 			}
 		}
 		return $result;
+		
 	}
 
 	//过滤
