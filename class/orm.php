@@ -55,7 +55,7 @@ class ORM
 					{
 						if (!empty($value[1]))
 						{
-							$t[] = "`" . $key . "` " . $value[0] . " ('" . implode("','", $this->filter($value[1])) . "')";
+							$t[] = "`" . $key . "` " . $value[0] . " ('" . implode("','", $value[1]) . "')";
 						}
 						else
 						{
@@ -294,7 +294,7 @@ class ORM
 			}
 		}
 		return $result;
-		
+
 	}
 
 	//过滤
