@@ -3,7 +3,7 @@
 class Core
 {
 	//系统核心类库一览表
-	public static $_system_class = array('core', 'arr', 'config', 'controller', 'cookie', 'db', 'orm', 'route', 'session', 'view', 'valid', 'redisdb');
+	public static $_system_class = array('core', 'arr', 'config', 'controller', 'cookie', 'db', 'orm', 'route', 'session', 'view', 'valid', 'redisdb', 'controller_template', 'curl', 'curl_options');
 	public static $_path = array();
 	public static $mvc = array();
 

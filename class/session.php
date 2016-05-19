@@ -27,11 +27,12 @@ class Session
 	);
 	// Garbage collection requests
 	private $_gc = 500;
-	// The old session id
-	private $_update_id;
 	//数据
 	private $_data;
 
+	/**
+	 * @return Session
+	 */
 	public static function instance()
 	{
 		if (!(Session::$_instance instanceof Session))

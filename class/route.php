@@ -94,6 +94,7 @@ class Route
 					Core::$mvc = [
 						'controller'	=> $controller_name,
 						'action'		=> $action_name,
+						'view'			=> Route::$_controller.'/'.Route::$_action,
 					];
 					$controller = new $controller_name();
 					$controller->before();
