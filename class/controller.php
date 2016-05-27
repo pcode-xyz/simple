@@ -45,7 +45,13 @@ class Controller
 	{
 		return $this->_filter($_POST, $key, $filter, $default);
 	}
-	
+
+	/**
+	 * @param $key
+	 * @param string $filter
+	 * @param null $default
+	 * @return mixed
+	 */
 	public function _r($key, $filter = 'trim', $default = null)
 	{
 		if (isset($_GET[$key]))

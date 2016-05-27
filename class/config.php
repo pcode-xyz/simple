@@ -6,6 +6,8 @@ class Config
 
 	//获取某文件中某字段 eg: database.username 获取database.php文件中的username字段的值
 	/**
+	 * @var $key string 文件名
+	 * @var $default mixed
 	 * @return array
 	 * */
 	public static function get($key, $default = null)

@@ -3,7 +3,7 @@
 class Core
 {
 	//系统核心类库一览表
-	public static $_system_class = array('core', 'arr', 'config', 'controller', 'cookie', 'db', 'orm', 'route', 'session', 'view', 'valid', 'redisdb', 'controller_template', 'curl', 'curl_options');
+	public static $_system_class = array('core', 'arr', 'config', 'controller', 'cookie', 'db', 'orm', 'route', 'session', 'view', 'valid', 'redisdb', 'controller_template', 'curl', 'curl_options', 'email');
 	public static $_path = array();
 	public static $mvc = array();
 
@@ -69,7 +69,16 @@ class Core
 	{
 		$time = time();
 		$log_file_name = date('Ymd', $time).'.log';
-		$fp = fopen(DOCROOT.'logs/'.$log_file_name, 'a+');
+		if (empty(Config::get('log.path')))
+		{
+			//本目录
+			$fp = fopen(DOCROOT.'logs/'.$log_file_name, 'a+');
+		}
+		else
+		{
+			//path指定目录
+			$fp = fopen(Config::get('log.path').$log_file_name, 'a+');
+		}
 
 		$date = date('Y-m-d H:i:s', $time);
 		if (is_array($data))
@@ -80,6 +89,29 @@ class Core
 		$str = ''.$date.' ['.$title.']'.$subtitle.' : '.$data."\n";
 		fwrite($fp, $str);
 		fclose($fp);
+	}
+
+	/**
+	 * 取客户端IP
+	 * @return string
+	 */
+	public static function get_client_ip()
+	{
+		$ip = '127.0.0.1';
+		if ( !empty($_SERVER["HTTP_X_FORWARDED_FOR"]) )
+		{
+			$ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+		}
+		else if ( !empty($_SERVER["HTTP_CLIENT_IP"]) )
+		{
+			$ip = $_SERVER["HTTP_CLIENT_IP"];
+		}
+		else if ( !empty($_SERVER["REMOTE_ADDR"]) )
+		{
+			$ip = $_SERVER["REMOTE_ADDR"];
+		}
+
+		return $ip;
 	}
 
 	public static function quit($str)
