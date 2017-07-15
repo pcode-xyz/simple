@@ -1,0 +1,20 @@
+{
+	"name": "bingxuecandong/simple",
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "simple",
+			"email": "gavin6487@gmail.com"
+		}
+	],
+	"config" : {
+		"secure-http" : false
+	},
+	"minimum-stability": "dev",
+	"autoload" : {
+		"classmap": [
+			"src/Simple.php"
+		]
+	}
+}
