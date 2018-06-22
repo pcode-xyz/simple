@@ -23,7 +23,7 @@ class INSERT extends Build
 		$values = array();
 		foreach ($data as $key=>$value)
 		{
-			$fields[] = $key;
+			$fields[] = trim($key);
 			$values[] = $this->filter($value);
 		}
 
@@ -47,7 +47,7 @@ class INSERT extends Build
 			$t_fields = array();
 			foreach ($temp as $key=>$value)
 			{
-				$t_fields[] = $key;
+				$t_fields[] = trim($key);
 				$t_values[] = $this->filter($value);
 			}
 			//fields只要一次

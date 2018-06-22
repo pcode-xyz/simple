@@ -5,17 +5,7 @@ namespace Simple;
 /**
  * @const 框架版本号
  */
-define('SIMPLE_VERSION', '4.3.0');
-
-/**
- * @const 框架代码所在路径
- */
-defined('SYS_PATH') or define('SYS_PATH', __DIR__.'/');
-
-/**
- * @const 项目路径
- */
-defined('APP_PATH') or define('APP_PATH', __DIR__.'/../app/');
+define('SIMPLE_VERSION', '5.0.0');
 
 /**
  * @const 定义config环境变量
@@ -45,66 +35,11 @@ class Simple
 {
 	public static $_instance = NULL;
 
-	/**
-	 * @var array $namespaces 根命名空间对应目录
-	 */
-	protected static $namespaces;
-
 	private $_start_time = 0;
 	private $_end_time = 0;
 	private $_start_memory = 0;
 	private $_end_memory = 0;
 	private $_max_memory = 0;
-
-	/**
-	 * 按PSR-4协议加载文件 大小写敏感
-	 * @param $class
-	 * @throws Exception\Service_Error
-	 */
-	public static function autoload($class)
-	{
-		$class_node_list = explode('\\', trim($class, '\\'));
-		//真实类名
-		$real_class_name = array_pop($class_node_list);
-		//获取顶级命名空间自定义地址
-		$class_namespace = array_shift($class_node_list);
-
-		//只自动加载框架命名空间下的内容
-		if (isset(self::$namespaces[$class_namespace]))
-		{
-			$file_path = self::$namespaces[$class_namespace] . implode('/', $class_node_list).'/'.$real_class_name.'.php';
-			if (is_file($file_path))
-			{
-				include_once $file_path;
-			}
-			else
-			{
-				throw new Exception\Service_Error('Class['.$class.'] Not Found');
-			}
-		}
-	}
-
-	/**
-	 * 设置命名空间
-	 * @param $namespace string 顶级命名空间 /结尾
-	 * @param $path string 路径
-	 */
-	public static function add_namespace($namespace, $path)
-	{
-		self::$namespaces[$namespace] = $path;
-	}
-
-	/**
-	 * @return Simple
-	 */
-	public static function instance()
-	{
-		if (empty(Simple::$_instance))
-		{
-			Simple::$_instance = new Simple();
-		}
-		return Simple::$_instance;
-	}
 
 	/**
 	 * Simple constructor.
@@ -113,11 +48,6 @@ class Simple
 	 */
 	private function __construct()
 	{
-		//autoload
-		Simple::add_namespace('Simple', SYS_PATH);
-		Simple::add_namespace('App', APP_PATH);
-		spl_autoload_register(array('\\Simple\\Simple', 'autoload'));
-
 		//捕捉warning
 		set_error_handler(function($errno, $error){
 			throw new Exception($error, $errno);
@@ -154,29 +84,7 @@ class Simple
 	{
 		try
 		{
-			//载入路由
-			if (file_exists(APP_PATH.'Router.php'))
-			{
-				require_once APP_PATH.'Router.php';
-			}
 
-			//cli支持
-			$cli = FALSE;
-			if (php_sapi_name() == 'cli')
-			{
-				$cli = TRUE;
-				$args = array_slice($_SERVER['argv'], 1);
-				$_SERVER['REQUEST_URI'] = !empty($args) ? ('/'.implode('/', $args)) : '/';
-			}
-			define('CLI_MODE', $cli);
-
-			//判断是否将json转_POST
-			if (AUTO_PARAM_JSON && (stripos(Arr::get($_SERVER, 'CONTENT_TYPE'), 'application/json') !== FALSE || stripos(Arr::get($_SERVER, 'HTTP_CONTENT_TYPE'), 'application/json') !== FALSE))
-			{
-				$data = file_get_contents('php://input');
-				$_POST = json_decode($data, TRUE);
-				unset($data);
-			}
 
 			//项目启动
 			Route::router();
@@ -195,36 +103,5 @@ class Simple
 				Error::default_handle($e);
 			}
 		}
-	}
-
-	/**
-	 * 查找文件
-	 * @param string $dir 查找所有命名空间下子目录的某文件
-	 * @param $filename
-	 * @param string $ext
-	 * @return bool|string
-	 */
-	public static function find_file($dir, $filename, $ext = '.php')
-	{
-		foreach (Simple::$namespaces as $namespace => $namespace_path)
-		{
-			$path = $namespace_path . $dir . '/' . $filename . $ext;
-			if (is_file($path))
-			{
-				return $path;
-			}
-		}
-
-		return FALSE;
-	}
-
-	/**
-	 * 加载文件并返回文件内容
-	 * @param $file
-	 * @return mixed
-	 */
-	public static function load($file)
-	{
-		return include $file;
 	}
 }

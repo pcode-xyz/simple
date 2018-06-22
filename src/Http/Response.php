@@ -1,13 +1,13 @@
 <?php
 
-namespace Simple;
+namespace Simple\Http;
 
 use Simple\Exception\Service_Error;
 
 /**
  * Class Response
  * 输出http响应
- * @package Simple
+ * @package Simple\Http
  */
 class Response
 {
@@ -44,6 +44,14 @@ class Response
 	];
 
 	private static $_instance = NULL;
+	/**
+	 * @var array $_header 要输出的头信息
+	 */
+	private $_header = [];
+	/**
+	 * @var int $_code 输出HTTP code
+	 */
+	private $_code = 200;
 
 	/**
 	 * @return Response
@@ -52,7 +60,7 @@ class Response
 	{
 		if (empty(self::$_instance))
 		{
-			self::$_instance = new Response();
+			self::$_instance = new self();
 		}
 		return self::$_instance;
 	}
@@ -68,16 +76,17 @@ class Response
 		{
 			foreach ($array as $key=>$item)
 			{
-				header($key.': '.$item);
+				$this->_header[$key] = $item;
 			}
 		}
-		elseif (is_null($value))
+		elseif (is_null($value) && is_string($array))
 		{
-			header($array);
+			$temp = explode(':', $array, 2);
+			$this->_header[trim($temp[0])] = trim($temp[1]);
 		}
 		else
 		{
-			header($array.': '.$value);
+			$this->_header[$array] = $value;
 		}
 	}
 

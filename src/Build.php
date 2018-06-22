@@ -160,6 +160,7 @@ abstract class Build
 					$symbol = 'IN';
 				}
 				$symbol = strtoupper($symbol);
+				$column = trim($column);
 
 				if ($symbol == 'IN' || $symbol == 'NOT IN')
 				{

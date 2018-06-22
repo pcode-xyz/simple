@@ -23,6 +23,7 @@ class UPDATE extends Build
 		$data_array = array();
 		foreach ($data as $key=>$value)
 		{
+			$key = trim($key);
 			if (substr($value, 0, 6) == 'SELF::')
 			{
 				$temp = substr($value, 6);

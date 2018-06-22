@@ -13,8 +13,8 @@
 	},
 	"minimum-stability": "dev",
 	"autoload" : {
-		"classmap": [
-			"src/Simple.php"
-		]
+		"psr-4" : {
+			"Simple\\": "src/"
+		}
 	}
 }

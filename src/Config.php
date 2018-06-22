@@ -2,8 +2,6 @@
 
 namespace Simple;
 
-use Simple\Exception\Service_Error;
-
 /**
  * Class Config
  * 读取App/Configs目录下的配置文件

@@ -124,7 +124,7 @@ class Response
 		$this->_error = $error;
 
 		//有正常响应时才需要拆分
-		if ($http_code == 200 && $error == 0)
+		if ($http_code == 200 && $errno == 0)
 		{
 			//curl option中有设置需要带header的选项 则拆分
 			if ($this->_option[CURLOPT_HEADER])

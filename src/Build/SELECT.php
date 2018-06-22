@@ -41,9 +41,17 @@ class SELECT extends Build
 			$columns = explode(',', $select);
 			foreach ($columns as $key => $column)
 			{
-				$columns[$key] = trim($column);
+				$temp = explode(' as ', $column);
+				if (count($temp) == 1)
+				{
+					$columns[$key] = '`'.trim($column).'`';
+				}
+				else
+				{
+					$columns[$key] = '`'.trim($temp[0]).'` AS `'.trim($temp[1]).'`';
+				}
 			}
-			$select = '`' . implode('`,`', $columns) . '`';
+			$select = implode(',', $columns);
 		}
 		$sql = 'SELECT '.$select. ' FROM '.$this->_table.$this->_where.$this->_order.$this->_limit;
 		$query = DB::instance($this->_db_config, $this->_db_node)->query($sql);
